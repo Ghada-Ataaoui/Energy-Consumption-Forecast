@@ -42,7 +42,8 @@ The system is deployed and monitored through **Home Assistant**, enabling visual
 ---
 
 ## 🖥️ Home Assistant Setup
-- Built and configured a **digital twin** of the building in **Home Assistant**.  
+- Built and configured a **digital twin** of the building in **Home Assistant**.
+- **Home Assistant** is used as OS on VMware® Workstation 17 Pro.
 - Sent the data through APIs.  
 - Created dashboards for **real-time monitoring** and comparison of actual vs. predicted energy usage.  
 
