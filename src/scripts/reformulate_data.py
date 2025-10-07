@@ -27,13 +27,18 @@ def reformulate_data(data_folder: str, appliance: str):
 
     if appliance not in df.columns:
         raise ValueError(f"Appliance '{appliance}' not found in columns: {df.columns.tolist()}")
+    
+    # Fill NaNs using linear interpolation
+    # df[appliance] = df[appliance].interpolate(method='linear')
 
-    # Compute 30-second rolling median
-    rolling_median = df[appliance].rolling('30s').median()
-    resampled = rolling_median.resample('30s').first().dropna().reset_index()
+
+    # # Compute 30-second rolling median
+    # rolling_median = df[appliance].rolling('30s').median()
+    resampled = df[appliance].resample('30s').first().dropna().reset_index()
     resampled['timestamp'] = resampled['timestamp'].astype('int64') // 10**9
 
-    # Final result DataFrame
+
+        # Build DataFrame with required columns
     result = pd.DataFrame({
         'measurement': 'Electricity',
         'appliance': appliance,
@@ -41,16 +46,48 @@ def reformulate_data(data_folder: str, appliance: str):
         'timestamp': resampled['timestamp']
     })
 
-    # Define output path
+    # Save to CSV with columns
     output_folder = r"C:\Users\Ghada\Desktop\Digital Twin\Datasets\Plegma_clean_dataset\DT\House_01\Data\data_preprocessed\predicition_data"
     os.makedirs(output_folder, exist_ok=True)
     output_file = os.path.join(output_folder, f"{appliance}_data_for_prediction.csv")
-    
-    # Save to CSV
     result.to_csv(output_file, index=False)
-    print(f"✅ Reformulated data saved to {output_file}")
-    
-    return result
+
+    print(f"✅ Column-formatted data saved to {output_file}")
 
 # Example usage
-df = reformulate_data('Data\Plegma Dataset\Electric_data', 'washing_machine')
+reformulate_data(r'Data\Plegma Dataset\Electric_data', 'P_agg')
+        # Final result DataFrame
+    # result = pd.DataFrame({
+    #     'measurement': 'Temperature',
+    #     'type': appliance,
+    #     'value': df[appliance],
+    #     'timestamp': df.index.astype('int64') // 10**9
+    # })
+    # Format each row to a string like: measurement=,type= value= timestamp (influxdb format)
+    # formatted_result = result.apply(
+    #     lambda row: f"{row['measurement']},appliance={row['appliance']} value={row['value']} {row['timestamp']}",
+    #     axis=1
+        
+    # )
+#     # If needed as a list of strings
+#     formatted_list = formatted_result.tolist()
+
+
+#     # Define output path
+#     output_folder = r"C:\Users\Ghada\Desktop\Digital Twin\Datasets\Plegma_clean_dataset\DT\House_01\Data\data_preprocessed"
+#     os.makedirs(output_folder, exist_ok=True)
+#     output_file = os.path.join(output_folder, f"Extracted_{appliance}_data.csv")
+
+#     # # Save to CSV
+#     # formatted_list.to_csv(output_file, index=False)
+#     # print(f"✅ Reformulated data saved to {output_file}")
+
+#     with open(output_file, 'w') as f:
+#         for line in formatted_list:
+#             f.write(line + '\n')
+
+    
+#     # return formatted_list
+
+# # Example usage
+# df = reformulate_data('Data\Plegma Dataset\Electric_data', 'ac_2')
