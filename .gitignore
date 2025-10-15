@@ -1,4 +1,5 @@
 __pycache__
 Data/Plegma Dataset/
 Data/data_preprocessed/Influxdb_data
+.env
 
