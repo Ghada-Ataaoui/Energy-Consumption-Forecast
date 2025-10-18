@@ -2,4 +2,4 @@ __pycache__
 Data/Plegma Dataset/
 Data/data_preprocessed/Influxdb_data
 .env
-
+src/API_connections/
